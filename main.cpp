@@ -1,86 +1,72 @@
 #include <iostream>
-#include <cmath>
+#include <string>
 using namespace std;
 
-struct Complex {
-    double real;
-    double imag;
+struct Car {
+    double length;
+    double clearance;
+    double engineVolume;
+    double enginePower;
+    double wheelDiameter;
+    string color;
+    string gearboxType;
 
-    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
-
-    Complex operator+(const Complex& c) {
-        return Complex(real + c.real, imag + c.imag);
+    void setValues(double l, double c, double ev, double ep, double wd, const string& col, const string& gt) {
+        length = l;
+        clearance = c;
+        engineVolume = ev;
+        enginePower = ep;
+        wheelDiameter = wd;
+        color = col;
+        gearboxType = gt;
     }
 
-    Complex operator-(const Complex& c) {
-        return Complex(real - c.real, imag - c.imag);
+    void display() const {
+        cout << "Car Details: \n";
+        cout << "Length: " << length << " meters\n";
+        cout << "Clearance: " << clearance << " cm\n";
+        cout << "Engine Volume: " << engineVolume << " liters\n";
+        cout << "Engine Power: " << enginePower << " HP\n";
+        cout << "Wheel Diameter: " << wheelDiameter << " inches\n";
+        cout << "Color: " << color << endl;
+        cout << "Gearbox Type: " << gearboxType << endl;
     }
 
-    Complex operator*(const Complex& c) {
-        return Complex(real * c.real - imag * c.imag, real * c.imag + imag * c.real);
+    bool isGearboxType(const string& type) const {
+        return gearboxType == type;
     }
 
-    Complex operator/(const Complex& c) {
-        double denom = c.real * c.real + c.imag * c.imag;
-        if (denom == 0) {
-            throw invalid_argument("Cannot divide by zero");
-        }
-        double r = (real * c.real + imag * c.imag) / denom;
-        double i = (imag * c.real - real * c.imag) / denom;
-        return Complex(r, i);
+    bool isColor(const string& col) const {
+        return color == col;
     }
 
-    void print() const {
-        if (imag < 0) {
-            cout << real << " - " << -imag << "i" << endl;
-        }
-        else {
-            cout << real << " + " << imag << "i" << endl;
-        }
-    }
-
-    double magnitude() const {
-        return sqrt(real * real + imag * imag);
-    }
-
-    double phase() const {
-        return atan2(imag, real);
+    bool isMorePowerfulThan(double power) const {
+        return enginePower > power;
     }
 };
 
 int main() {
-    Complex c1(3, 4);
-    Complex c2(1, 2);
+    Car car1, car2;
 
-    cout << "c1: ";
-    c1.print();
+    car1.setValues(4.5, 16, 2.0, 150, 18, "Red", "Automatic");
+    car2.setValues(4.2, 17, 1.8, 120, 17, "Blue", "Manual");
 
-    cout << "c2: ";
-    c2.print();
+    car1.display();
+    cout << endl;
+    car2.display();
+    cout << endl;
 
-    Complex sum = c1 + c2;
-    cout << "Sum: ";
-    sum.print();
-
-    Complex diff = c1 - c2;
-    cout << "Difference: ";
-    diff.print();
-
-    Complex prod = c1 * c2;
-    cout << "Product: ";
-    prod.print();
-
-    try {
-        Complex quot = c1 / c2;
-        cout << "Quotient: ";
-        quot.print();
-    }
-    catch (const exception& e) {
-        cout << "Error: " << e.what() << endl;
+    if (car1.isGearboxType("Automatic")) {
+        cout << "Car 1 has an automatic gearbox.\n";
     }
 
-    cout << "Magnitude of c1: " << c1.magnitude() << endl;
-    cout << "Phase of c1: " << c1.phase() << endl;
+    if (car2.isColor("Blue")) {
+        cout << "Car 2 is blue.\n";
+    }
+
+    if (car1.isMorePowerfulThan(140)) {
+        cout << "Car 1 is more powerful than 140 HP.\n";
+    }
 
     return 0;
 }
